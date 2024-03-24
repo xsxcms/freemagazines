@@ -8,6 +8,8 @@ class MySpider(scrapy.Spider):
         'https://freemagazines.top/technology-science',
     ]
 
+    out_file = 'vk_links_' + time.strftime('%Y%m%d_%H%M%S') + '.txt'
+
     def parse(self, response):
         # Extracting links from current page
         post_image_divs = response.css('div.post-image')
@@ -15,7 +17,7 @@ class MySpider(scrapy.Spider):
             first_a_tag = post_image_div.css('a').attrib['href']
             if first_a_tag.startswith('https://vk.com/doc'):
                 # If link starts with 'https://vk.com/doc', save it
-                with open('vk_links_' + time.strftime('%Y%m%d_%H%M%S') + '.txt', 'a') as f:
+                with open(MySpider.out_file, 'a') as f:
                     f.write(first_a_tag + '\n')
 
         # Getting next page link and follow it
@@ -34,6 +36,6 @@ class MySpider(scrapy.Spider):
         for link in vk_links:
             if link.startswith('https://vk.com/doc'):
                 # If link starts with 'https://vk.com/doc', save it
-                with open('vk_links.txt', 'a') as f:
+                with open(MySpider.out_file, 'a') as f:
                     f.write(link + '\n')
 
